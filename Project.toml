@@ -1,0 +1,4 @@
+name = "DashBase"
+uuid = "03207cf0-e2b3-4b91-9ca8-690cf0fb507e"
+authors = ["Alexandr Romanenko <waralex@gmail.com>"]
+version = "0.1.0"

@@ -1,0 +1,7 @@
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+deps/build.log
+.vscode
+Manifest.toml
+.DS_Store
