@@ -45,7 +45,7 @@ mutable struct ResourcesRegistry
     components ::Dict{String, ResourcePkg}
     dash_dependency ::Union{Nothing, NamedTuple{(:dev, :prod), Tuple{ResourcePkg,ResourcePkg}}}
     dash_renderer ::Union{Nothing, ResourcePkg}
-    ResourcesRegistry(;dash_dependency, dash_renderer) = new(Dict{String, ResourcePkg}(), dash_dependency, dash_renderer)
+    ResourcesRegistry(;dash_dependency = nothing, dash_renderer = nothing) = new(Dict{String, ResourcePkg}(), dash_dependency, dash_renderer)
 end
 
 get_dash_dependencies(registry::ResourcesRegistry, prop_check::Bool) = prop_check ?
@@ -59,7 +59,7 @@ function register_package!(registry::ResourcesRegistry, pkg::ResourcePkg)
     registry.components[pkg.namespace] = pkg
 end
 
-const resources_registry = ResourcesRegistry(dash_dependency = nothing, dash_renderer = nothing)
+const resources_registry = ResourcesRegistry()
 
 register_package(pkg::ResourcePkg) = register_package!(resources_registry, pkg)
 
