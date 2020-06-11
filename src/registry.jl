@@ -46,6 +46,7 @@ mutable struct ResourcesRegistry
     dash_dependency ::Union{Nothing, NamedTuple{(:dev, :prod), Tuple{ResourcePkg,ResourcePkg}}}
     dash_renderer ::Union{Nothing, ResourcePkg}
     ResourcesRegistry() = new(Dict{String, ResourcePkg}(), nothing, nothing)
+    ResourcesRegistry(;dash_dependency, dash_renderer) = new(Dict{String, ResourcePkg}(), dash_dependency, dash_renderer)
 end
 
 get_dash_dependencies(registry::ResourcesRegistry, prop_check::Bool) = prop_check ?
