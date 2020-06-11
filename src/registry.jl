@@ -40,12 +40,6 @@ struct ResourcePkg
     ResourcePkg(namespace, path, resources = Resource[]; version = "")  = new(namespace, path, resources, version)
 end
 
-get_dash_dependencies(registry::ResourcesRegistry, prop_check::Bool) = prop_check ?
-                                                                    registry.dash_dependency[:dev] :
-                                                                    registry.dash_dependency[:prod]
-
-get_componens_pkgs(registry::ResourcesRegistry) = values(registry.components)
-get_dash_renderer_pkg(registry::ResourcesRegistry) = registry.dash_renderer 
 
 mutable struct ResourcesRegistry    
     components ::Dict{String, ResourcePkg}
@@ -53,6 +47,13 @@ mutable struct ResourcesRegistry
     dash_renderer ::Union{Nothing, ResourcePkg}
     ResourcesRegistry() = new(Dict{String, ResourcePkg}(), nothing, nothing)
 end
+
+get_dash_dependencies(registry::ResourcesRegistry, prop_check::Bool) = prop_check ?
+                                                                    registry.dash_dependency[:dev] :
+                                                                    registry.dash_dependency[:prod]
+
+get_componens_pkgs(registry::ResourcesRegistry) = values(registry.components)
+get_dash_renderer_pkg(registry::ResourcesRegistry) = registry.dash_renderer 
 
 function register_package!(registry::ResourcesRegistry, pkg::ResourcePkg)
     registry.components[pkg.namespace] = pkg
