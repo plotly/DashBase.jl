@@ -1,13 +1,14 @@
 name = "DashBase"
 uuid = "03207cf0-e2b3-4b91-9ca8-690cf0fb507e"
 authors = ["Alexandr Romanenko <waralex@gmail.com>"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 JSON2 = "2535ab7d-5cd8-5a07-80ac-9b1792aadce3"
+Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
+YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
 
 [compat]
 JSON2 = "0.3.1"
-julia = "1.2"
+julia = "1.4"
