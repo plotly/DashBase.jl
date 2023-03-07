@@ -1,5 +1,5 @@
 module DashBase
-import JSON2
+import JSON3
 include("components.jl")
 include("registry.jl")
 export Component, push_prop!, get_name, get_type, get_namespace,

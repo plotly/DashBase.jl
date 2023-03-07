@@ -4,10 +4,9 @@ authors = ["Alexandr Romanenko <waralex@gmail.com>"]
 version = "0.1.0"
 
 [deps]
-JSON2 = "2535ab7d-5cd8-5a07-80ac-9b1792aadce3"
+JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
-
 [compat]
-JSON2 = "0.3.1"
+JSON3 = "1"
 julia = "1.2"

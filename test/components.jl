@@ -1,5 +1,5 @@
 using DashBase
-using JSON2
+using JSON3
 
 @testset "components creation" begin
     test_comp = Component("html_div", "Div", "dash_html_components",
@@ -29,9 +29,9 @@ using JSON2
      id = 10, 
      key = 1
      )
-    json = JSON2.write(test_comp)
-    res = JSON2.read(json)
-    @test keys(res) == (:type, :namespace, :props)
+    json = JSON3.write(test_comp)
+    res = JSON3.read(json)
+    @test all(keys(res) .== [:type, :namespace, :props])
     @test sort(collect(keys(res.props))) == sort([:id, :n_clicks, Symbol("data-id")])
     @test res.props.id == 10
     @test res.props.n_clicks == 1
