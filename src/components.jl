@@ -55,8 +55,5 @@ Base.propertynames(comp::Component) = collect(get_available_props(comp))
 
 push_prop!(component::Component, prop::Symbol, value) = push!(component.props, prop=>to_dash(value))
 
-JSON2.@format Component begin
-    name => (exclude = true,)
-    available_props => (exclude = true,)
-    wildcard_regex => (exclude = true,)
-end
+JSON3.StructTypes.StructType(::Type{DashBase.Component}) = JSON3.StructTypes.Struct()
+JSON3.StructTypes.excludes(::Type{DashBase.Component}) = (:name, :available_props, :wildcard_regex)
