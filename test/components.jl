@@ -5,10 +5,10 @@ using JSON3
     test_comp = Component("html_div", "Div", "dash_html_components",
      [:children, :id, :n_clicks],
      [Symbol("data-"), Symbol("aria-")];
-     id = 10, 
+     id = 10,
      n_clicks = 1
      )
-    
+
     @test get_name(test_comp) == "html_div"
     @test get_type(test_comp) == "Div"
     @test get_namespace(test_comp) == "dash_html_components"
@@ -26,7 +26,7 @@ using JSON3
     @test_throws ErrorException Component("html_div", "Div", "dash_html_components",
      [:children, :id, :n_clicks],
      [Symbol("data-"), Symbol("aria-")];
-     id = 10, 
+     id = 10,
      key = 1
      )
     json = JSON3.write(test_comp)
@@ -42,7 +42,7 @@ end
     test_comp = Component("html_div", "Div", "dash_html_components",
      [:children, :id, :n_clicks],
      Symbol[];
-     id = 10, 
+     id = 10,
      n_clicks = 1
      )
 
@@ -54,4 +54,18 @@ end
 
     @test_throws ErrorException test_comp.var"data-id" = 20
     @test_throws ErrorException test_comp.aaaaa
+end
+
+@testset "Index by id" begin
+    layout = html_div() do
+            dcc_input(id = "my-id", value="initial value", type = "text"),
+            html_div(id = "my-div", children = [
+                html_div(children = []),
+                "string",
+                html_div(id = "target")
+            ]),
+            html_div(id = "my-div2")
+        end
+    @test layout["target"].id == "target"
+    @test layout["ups"] === nothing
 end
