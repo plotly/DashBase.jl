@@ -1,6 +1,6 @@
 to_dash(t::Any) = t
 
-struct Component 
+struct Component
     name ::String
     type ::String
     namespace ::String
@@ -9,9 +9,9 @@ struct Component
     wildcard_regex ::Union{Nothing, Regex}
     function Component(name::String, type::String, namespace::String,
                             props::Vector{Symbol}, wildcard_props::Vector{Symbol}; kwargs...)
-        
+
         available_props = Set{Symbol}(props)
-        wildcard_regex::Union{Nothing, Regex} = nothing   
+        wildcard_regex::Union{Nothing, Regex} = nothing
         if !isempty(wildcard_props)
             wildcard_regex = Regex(join(string.(wildcard_props), "|"))
         end
@@ -30,13 +30,36 @@ get_available_props(comp::Component) = getfield(comp, :available_props)
 get_wildcard_regex(comp::Component) = getfield(comp, :wildcard_regex)
 get_props(comp::Component) = getfield(comp, :props)
 
-function Base.getproperty(comp::Component, prop::Symbol) 
+const VecChildTypes = Union{NTuple{N, Component} where {N}, Vector{<:Component}}
+
+function Base.getindex(component::Component, id::AbstractString)
+  component.id == id && return component
+  hasproperty(component, :children) || return nothing
+  cc = component.children
+  return if cc isa Union{VecChildTypes, DashBase.Component}
+        cc[id]
+    elseif cc isa AbstractVector
+        fcc = identity.(filter(x->hasproperty(x, :id), cc))
+        isempty(fcc) ? nothing : fcc[id]
+    else
+        nothing
+    end
+end
+function Base.getindex(children::VecChildTypes, id::AbstractString)
+  for element in children
+    element.id == id && return element
+    el = element[id]
+    el !== nothing && return el
+  end
+end
+
+function Base.getproperty(comp::Component, prop::Symbol)
     !Base.hasproperty(comp, prop) && error("Component $(get_name(comp)) has no property $(prop)")
     props = get_props(comp)
     return haskey(props, prop) ? props[prop] : nothing
 end
 
-function Base.setproperty!(comp::Component, prop::Symbol, value) 
+function Base.setproperty!(comp::Component, prop::Symbol, value)
     !Base.hasproperty(comp, prop) && error("Component $(get_name(comp)) has no property $(prop)")
     props = get_props(comp)
     push!(props, prop=>to_dash(value))
