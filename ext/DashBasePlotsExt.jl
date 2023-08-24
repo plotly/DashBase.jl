@@ -1,8 +1,8 @@
 module DashBasePlotsExt
 
-import Plots
-import DashBase
+using DashBase
 
+isdefined(Base, :get_extension) ? (using Plots) : (using ..Plots)
 
 function DashBase.to_dash(p::Plots.Plot{Plots.PlotlyBackend})
     return if haskey(Base.loaded_modules, Base.PkgId(Base.UUID("a03496cd-edff-5a9b-9e67-9cda94a718b5"), "PlotlyBase")) &&
