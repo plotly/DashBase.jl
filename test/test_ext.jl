@@ -1,25 +1,36 @@
-using DashBase
 using Test
-using Plots
-plotlyjs()
+using DashBase
+import PlotlyBase
+import PlotlyJS
+import Plots
 
-@testset "PlotlyJS" begin
-    pl = @test_nowarn DashBase.to_dash(plot(1:5))
-    @test pl isa PlotlyJS.SyncPlot
-    pl = @test_nowarn DashBase.to_dash(pl)
-    @test haskey(pl, :layout)
-    @test haskey(pl, :data)
-    @test haskey(pl, :frames)
-    @test !haskey(pl, :config)
+function run_assertions(pl)
+    obj = @test_nowarn DashBase.to_dash(pl)
+    @test obj isa Dict{Symbol, Any}
+    @test obj[:data][1][:y] == [1, 2, 3, 4, 5]
+    @test haskey(obj, :layout)
+    @test haskey(obj, :frames)
+    @test !haskey(obj, :config)
 end
 
-plotly()
-@testset "PlotlyBase" begin
-    pl = @test_nowarn DashBase.to_dash(plot(1:5))
-    @test pl isa PlotlyBase.Plot
-    pl = @test_nowarn DashBase.to_dash(pl)
-    @test haskey(pl, :layout)
-    @test haskey(pl, :data)
-    @test haskey(pl, :frames)
-    @test !haskey(pl, :config)
+@testset "DashBasePlotlyBaseExt" begin
+    pl = PlotlyBase.Plot(1:5)
+    run_assertions(pl)
+end
+
+@testset "DashBasePlotsJSExt" begin
+    pl = PlotlyJS.plot(1:5)
+    run_assertions(pl)
+end
+
+@testset "DashBasePlotsExt + plotlyjs()" begin
+    Plots.plotlyjs()
+    pl = Plots.plot(1:5)
+    run_assertions(pl)
+end
+
+@testset "DashBasePlotsExt + plotly()" begin
+    Plots.plotly()
+    pl = Plots.plot(1:5)
+    run_assertions(pl)
 end
