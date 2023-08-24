@@ -1,10 +1,10 @@
-struct Resource       
+struct Resource
     relative_package_path::Union{Nothing, Vector{String}}
     dev_package_path::Union{Nothing, Vector{String}}
     external_url::Union{Nothing, Vector{String}}
-    type::Symbol 
+    type::Symbol
     async::Symbol # :none, :eager, :lazy May be we should use enum
-    function Resource(;relative_package_path, dev_package_path = nothing, external_url = nothing, type = :js, dynamic = nothing, async=nothing) 
+    function Resource(;relative_package_path, dev_package_path = nothing, external_url = nothing, type = :js, dynamic = nothing, async=nothing)
         (!isnothing(dynamic) && !isnothing(async)) && throw(ArgumentError("Can't have both 'dynamic' and 'async'"))
         !in(type, [:js, :css]) &&  throw(ArgumentError("type must be `:js` or `:css`"))
         async_symbol = :none
@@ -35,13 +35,13 @@ isdynamic(resource::Resource, eager_loading::Bool) = resource.async == :lazy || 
 struct ResourcePkg
     namespace ::String
     path ::String
-    resources ::Vector{Resource}    
+    resources ::Vector{Resource}
     version ::String
     ResourcePkg(namespace, path, resources = Resource[]; version = "")  = new(namespace, path, resources, version)
 end
 
 
-mutable struct ResourcesRegistry    
+mutable struct ResourcesRegistry
     components ::Dict{String, ResourcePkg}
     dash_dependency ::Union{Nothing, NamedTuple{(:dev, :prod), Tuple{ResourcePkg,ResourcePkg}}}
     dash_renderer ::Union{Nothing, ResourcePkg}
@@ -53,7 +53,7 @@ get_dash_dependencies(registry::ResourcesRegistry, prop_check::Bool) = prop_chec
                                                                     registry.dash_dependency[:prod]
 
 get_componens_pkgs(registry::ResourcesRegistry) = values(registry.components)
-get_dash_renderer_pkg(registry::ResourcesRegistry) = registry.dash_renderer 
+get_dash_renderer_pkg(registry::ResourcesRegistry) = registry.dash_renderer
 
 function register_package!(registry::ResourcesRegistry, pkg::ResourcePkg)
     registry.components[pkg.namespace] = pkg

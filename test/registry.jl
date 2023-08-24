@@ -26,7 +26,7 @@ using DashBase
         relative_package_path = "test.js",
         async = :lazy
     )
-    
+
     @test test_resource.async == :lazy
     @test DashBase.isdynamic(test_resource, true)
     @test DashBase.isdynamic(test_resource, false)
@@ -35,7 +35,7 @@ using DashBase
         relative_package_path = "test.js",
         async = :eager
     )
-    
+
     @test test_resource.async == :eager
     @test !DashBase.isdynamic(test_resource, true)
     @test DashBase.isdynamic(test_resource, false)
