@@ -6,7 +6,7 @@ struct Resource
     async::Symbol # :none, :eager, :lazy May be we should use enum
     function Resource(;relative_package_path, dev_package_path = nothing, external_url = nothing, type = :js, dynamic = nothing, async=nothing)
         (!isnothing(dynamic) && !isnothing(async)) && throw(ArgumentError("Can't have both 'dynamic' and 'async'"))
-        !in(type, [:js, :css]) &&  throw(ArgumentError("type must be `:js` or `:css`"))
+        (type !== :js && type !== :css) && throw(ArgumentError("type must be `:js` or `:css`"))
         async_symbol = :none
         if !isnothing(dynamic)
             dynamic == true && (async_symbol = :lazy)
@@ -17,7 +17,7 @@ struct Resource
     end
 end
 
-_path_to_vector(s::Nothing) = nothing
+_path_to_vector(::Nothing) = nothing
 _path_to_vector(s::String) = [s]
 _path_to_vector(s::Vector{String}) = s
 
@@ -49,8 +49,8 @@ mutable struct ResourcesRegistry
 end
 
 get_dash_dependencies(registry::ResourcesRegistry, prop_check::Bool) = prop_check ?
-                                                                    registry.dash_dependency[:dev] :
-                                                                    registry.dash_dependency[:prod]
+                                                                    something(registry.dash_dependency)[:dev] :
+                                                                    something(registry.dash_dependency)[:prod]
 
 get_componens_pkgs(registry::ResourcesRegistry) = values(registry.components)
 get_dash_renderer_pkg(registry::ResourcesRegistry) = registry.dash_renderer
