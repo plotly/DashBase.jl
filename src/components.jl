@@ -13,7 +13,7 @@ struct Component
         available_props = Set{Symbol}(props)
         wildcard_regex::Union{Nothing, Regex} = nothing
         if !isempty(wildcard_props)
-            wildcard_regex = Regex(join(string.(wildcard_props), "|"))
+            wildcard_regex = Regex(join(wildcard_props, "|"))
         end
         component = new(name, type, namespace, Dict{Symbol, Any}(), available_props, wildcard_regex)
         for (prop, value) in kwargs
